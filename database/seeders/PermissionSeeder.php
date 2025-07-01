@@ -35,6 +35,10 @@ class PermissionSeeder extends Seeder
             'location_read',
             'location_update',
             'location_delete',
+            'technician_create',
+            'technician_read',
+            'technician_update',
+            'technician_delete',
         ];
 
         foreach ($permissions as $permission) {

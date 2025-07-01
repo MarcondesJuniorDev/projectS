@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ClientSeeder::class,
             ServiceLocationSeeder::class,
+            TechnicianSeeder::class,
         ]);
     }
 }
