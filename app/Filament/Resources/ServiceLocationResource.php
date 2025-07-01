@@ -2,85 +2,95 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ClientResource\Pages;
-use App\Filament\Resources\ClientResource\RelationManagers;
-use App\Models\Client;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\ServiceLocation;
+use Filament\Resources\Resource;
+use AnourValar\EloquentSerialize\Service;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ServiceLocationResource\Pages;
+use App\Filament\Resources\ServiceLocationResource\RelationManagers;
+use Filament\Forms\Components\Select;
 
-class ClientResource extends Resource
+class ServiceLocationResource extends Resource
 {
-    protected static ?string $model = Client::class;
-    protected static ?string $label = 'Cliente';
-    protected static ?string $pluralLabel = 'Clientes';
-    protected static ?string $slug = 'clientes';
-    protected static ?string $navigationIcon = 'heroicon-o-wallet';
-
+    protected static ?string $model = ServiceLocation::class;
+    protected static ?string $label = 'Localização';
+    protected static ?string $pluralLabel = 'Localizações';
+    protected static ?string $slug = 'localizacoes';
+    protected static ?string $navigationIcon = 'heroicon-o-map';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\Select::make('client_id')
+                    ->label('Cliente')
+                    ->relationship('client', titleAttribute: 'name')
+                    ->searchable()
                     ->required()
-                    ->label('Nome')
+                    ->preload(),
+                Forms\Components\TextInput::make('name')
+                    ->label('Nome da Localização')
+                    ->required()
                     ->unique(ignoreRecord: true)
                     ->columnSpanFull()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('corporate_name')
-                    ->label('Razão Social')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('cnpj')
-                    ->label('CNPJ')
-                    ->unique(ignoreRecord: true)
-                    ->mask('99.999.999/9999-99')
-                    ->maxLength(18),
-                Forms\Components\TextInput::make('state_registration')
-                    ->label('Inscrição Estadual')
-                    ->maxLength(20),
+
                 Forms\Components\TextInput::make('address')
                     ->label('Endereço')
                     ->columnSpanFull()
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('city')
                     ->label('Cidade')
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('state')
                     ->label('Estado')
-                    ->placeholder('AM')
                     ->maxLength(2),
+
                 Forms\Components\TextInput::make('zip_code')
                     ->label('CEP')
                     ->mask('99999-999')
                     ->placeholder('99999-999')
                     ->maxLength(10),
+
                 Forms\Components\TextInput::make('phone')
                     ->label('Telefone')
                     ->tel()
                     ->maxLength(20),
+
                 Forms\Components\TextInput::make('email')
                     ->label('E-mail')
                     ->email()
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('contact_person_name')
                     ->label('Nome da Pessoa de Contato')
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('contact_person_phone')
                     ->label('Telefone da Pessoa de Contato')
                     ->tel()
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('contact_person_email')
                     ->label('E-mail da Pessoa de Contato')
                     ->email()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('notes')
+
+                Forms\Components\Textarea::make('reference_point')
+                    ->label('Ponto de Referência')
+                    ->columnSpanFull(),
+
+                Forms\Components\Textarea::make('notes')
                     ->label('Observações')
-                    ->maxLength(length: 3000),
+                    ->maxLength(3000)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -88,21 +98,25 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Empresa')
+                Tables\Columns\TextColumn::make('client.name')
+                    ->label('Cliente')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('cnpj')
-                    ->label('CNPJ')
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nome da Localização')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('city')
+                    ->label('Cidade')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Telefone')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->label('E-mail')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('contact_person_name')
                     ->label('Nome da Pessoa de Contato')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Criado em')
@@ -116,15 +130,22 @@ class ClientResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('state')
-                    ->label('Estado')
-                    ->options(Client::pluck('state', 'state'))
+                SelectFilter::make('client_id')
+                    ->label('Cliente')
+                    ->options(fn () => \App\Models\Client::all()->pluck('name', 'id'))
                     ->default(null)
                     ->placeholder('Todos'),
+
+                SelectFilter::make('state')
+                    ->label('Estado')
+                    ->options(ServiceLocation::pluck('state', 'state'))
+                    ->default(null)
+                    ->placeholder('Todos'),
+            ])->headerActions([
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->label('Editar'),
+                Tables\Actions\DeleteAction::make()->label('Excluir'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -143,9 +164,9 @@ class ClientResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClients::route('/'),
-            'create' => Pages\CreateClient::route('/create'),
-            'edit' => Pages\EditClient::route('/{record}/edit'),
+            'index' => Pages\ListServiceLocations::route('/'),
+            'create' => Pages\CreateServiceLocation::route('/create'),
+            'edit' => Pages\EditServiceLocation::route('/{record}/edit'),
         ];
     }
 }

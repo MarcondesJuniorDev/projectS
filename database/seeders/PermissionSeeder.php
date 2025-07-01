@@ -31,6 +31,10 @@ class PermissionSeeder extends Seeder
             'client_read',
             'client_update',
             'client_delete',
+            'location_create',
+            'location_read',
+            'location_update',
+            'location_delete',
         ];
 
         foreach ($permissions as $permission) {

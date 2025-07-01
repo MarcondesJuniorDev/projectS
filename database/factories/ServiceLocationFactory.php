@@ -2,15 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Models\ServiceLocation;
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClientFactory extends Factory
+class ServiceLocationFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      */
-    protected $model = Client::class;
+    protected $model = ServiceLocation::class;
 
     /**
      * Define the model's default state.
@@ -19,9 +20,6 @@ class ClientFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->company,
-            'corporate_name' => $this->faker->companySuffix,
-            'cnpj' => $this->faker->unique()->regexify('[0-9]{2}\.[0-9]{3}\.[0-9]{3}/[0-9]{4}-[0-9]{2}'),
-            'state_registration' => $this->faker->regexify('[0-9]{9}'),
             'address' => $this->faker->streetAddress,
             'city' => $this->faker->city,
             'state' => $this->faker->stateAbbr,
@@ -31,7 +29,9 @@ class ClientFactory extends Factory
             'contact_person_name' => $this->faker->name,
             'contact_person_phone' => $this->faker->phoneNumber,
             'contact_person_email' => $this->faker->unique()->safeEmail,
-            'notes' => $this->faker->sentence,
+            'reference_point' => $this->faker->sentence,
+            'notes' => $this->faker->paragraph,
+            'client_id' => Client::factory(),
         ];
     }
 }
