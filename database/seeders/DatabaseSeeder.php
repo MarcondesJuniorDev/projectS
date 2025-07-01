@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             ServiceLocationSeeder::class,
             TechnicianSeeder::class,
             SupplierSeeder::class,
+            MaterialSeeder::class,
         ]);
     }
 }
