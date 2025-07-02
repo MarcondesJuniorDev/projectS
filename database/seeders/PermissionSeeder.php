@@ -47,6 +47,10 @@ class PermissionSeeder extends Seeder
             'material_read',
             'material_update',
             'material_delete',
+            'service_template_create',
+            'service_template_read',
+            'service_template_update',
+            'service_template_delete',
         ];
 
         foreach ($permissions as $permission) {

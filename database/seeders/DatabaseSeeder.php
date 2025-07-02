@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             TechnicianSeeder::class,
             SupplierSeeder::class,
             MaterialSeeder::class,
+            ServiceTemplateSeeder::class,
         ]);
     }
 }
