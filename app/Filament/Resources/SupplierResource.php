@@ -19,6 +19,8 @@ class SupplierResource extends Resource
     protected static ?string $label = 'Fornecedor';
     protected static ?string $pluralLabel = 'Fornecedores';
     protected static ?string $slug = 'fornecedores';
+    protected static ?string $navigationGroup = 'Teste';
+    protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-truck';
 
     public static function form(Form $form): Form
@@ -64,7 +66,7 @@ class SupplierResource extends Resource
                 Forms\Components\TextInput::make('state')
                     ->maxLength(2)
                     ->nullable()
-                    ->label('Estado (UF)')
+                    ->label('Estado')
                     ->helperText('Use a sigla do estado, por exemplo: AM, PA, RR')
                     ->placeholder('AM'),
 
@@ -77,6 +79,8 @@ class SupplierResource extends Resource
 
                 Forms\Components\TextInput::make('phone')
                     ->maxLength(20)
+                    ->mask('(99) 99999-9999')
+                    ->placeholder('(99) 99999-9999')
                     ->tel()
                     ->nullable()
                     ->label('Telefone'),
@@ -100,6 +104,8 @@ class SupplierResource extends Resource
 
                 Forms\Components\TextInput::make('contact_person_phone')
                     ->tel()
+                    ->mask('(99) 99999-9999')
+                    ->placeholder('(99) 99999-9999')
                     ->maxLength(15)
                     ->nullable()
                     ->label('Telefone do Contato'),

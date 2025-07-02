@@ -20,6 +20,8 @@ class ClientResource extends Resource
     protected static ?string $label = 'Cliente';
     protected static ?string $pluralLabel = 'Clientes';
     protected static ?string $slug = 'clientes';
+    protected static ?string $navigationGroup = 'Teste';
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
 
     public static function form(Form $form): Form
@@ -61,6 +63,8 @@ class ClientResource extends Resource
                     ->maxLength(10),
                 Forms\Components\TextInput::make('phone')
                     ->label('Telefone')
+                    ->mask('(99) 99999-9999')
+                    ->placeholder('(99) 99999-9999')
                     ->tel()
                     ->maxLength(20),
                 Forms\Components\TextInput::make('email')
@@ -72,6 +76,8 @@ class ClientResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('contact_person_phone')
                     ->label('Telefone da Pessoa de Contato')
+                    ->mask('(99) 99999-9999')
+                    ->placeholder('(99) 99999-9999')
                     ->tel()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('contact_person_email')

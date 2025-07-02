@@ -19,6 +19,8 @@ class TechnicianResource extends Resource
     protected static ?string $label = 'Técnico';
     protected static ?string $pluralLabel = 'Técnicos';
     protected static ?string $slug = 'tecnicos';
+    protected static ?string $navigationGroup = 'Teste';
+    protected static ?int $navigationSort = 3;
     protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
     const SPECIALITY_TRANSLATIONS = [

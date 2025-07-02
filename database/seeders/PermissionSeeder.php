@@ -51,6 +51,10 @@ class PermissionSeeder extends Seeder
             'service_template_read',
             'service_template_update',
             'service_template_delete',
+            'service_order_create',
+            'service_order_read',
+            'service_order_update',
+            'service_order_delete',
         ];
 
         foreach ($permissions as $permission) {

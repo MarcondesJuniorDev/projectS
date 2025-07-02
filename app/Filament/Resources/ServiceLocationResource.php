@@ -22,6 +22,8 @@ class ServiceLocationResource extends Resource
     protected static ?string $label = 'Localização';
     protected static ?string $pluralLabel = 'Localizações';
     protected static ?string $slug = 'localizacoes';
+    protected static ?string $navigationGroup = 'Teste';
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-map';
     public static function form(Form $form): Form
     {
@@ -61,6 +63,8 @@ class ServiceLocationResource extends Resource
 
                 Forms\Components\TextInput::make('phone')
                     ->label('Telefone')
+                    ->mask('(99) 99999-9999')
+                    ->placeholder('(22) 55555-4444')
                     ->tel()
                     ->maxLength(20),
 
@@ -75,6 +79,8 @@ class ServiceLocationResource extends Resource
 
                 Forms\Components\TextInput::make('contact_person_phone')
                     ->label('Telefone da Pessoa de Contato')
+                    ->mask('(99) 99999-9999')
+                    ->placeholder('(99) 99999-9999')
                     ->tel()
                     ->maxLength(255),
 

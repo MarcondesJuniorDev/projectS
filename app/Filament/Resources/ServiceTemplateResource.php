@@ -19,6 +19,8 @@ class ServiceTemplateResource extends Resource
     protected static ?string $label = 'Modelo de Serviço';
     protected static ?string $pluralLabel = 'Modelos de Serviço';
     protected static ?string $slug = 'modelos-de-servico';
+    protected static ?string $navigationGroup = 'Teste';
+    protected static ?int $navigationSort = 6;
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     public static function form(Form $form): Form
